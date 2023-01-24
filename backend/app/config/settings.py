@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     DB_NAME: str = config("DB_NAME")
     TEST_DB_NAME: str = config("TEST_DB_NAME", default="chain_goats_test_db")
     DB_TYPE: str = config("DB_TYPE")
+    MYSQL_DRIVER: str = config("MYSQL_DRIVER")
 
 
 
