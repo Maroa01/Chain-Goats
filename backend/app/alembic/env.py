@@ -1,7 +1,9 @@
 from logging.config import fileConfig
 
+from config.settings import settings, BASE_DIR
+from database import Base
 from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
@@ -18,12 +20,35 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+DB_TYPE = settings.DB_TYPE
+
+
+def get_url():
+    DB_USER = settings.DB_USER
+    DB_PASSWORD = settings.DB_PASSWORD
+    DB_HOST = settings.DB_HOST
+    DB_PORT = settings.DB_PORT
+    DB_NAME = settings.DB_NAME
+
+    if DB_TYPE == "sqlite":
+        BASE_PATH = f"sqlite:///{BASE_DIR}"
+        DATABASE_URL = BASE_PATH + "/database.db"
+
+    elif DB_TYPE == "mysql":
+        MYSQL_DRIVER = settings.MYSQL_DRIVER
+        DATABASE_URL = f"mysql+{MYSQL_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"  # noqa: E501
+
+    elif DB_TYPE == "postgresql":
+        DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"  # noqa: E501
+
+    return DATABASE_URL
 
 
 def run_migrations_offline() -> None:
@@ -38,7 +63,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -57,8 +82,10 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    configuration = config.get_section(config.config_ini_section)
+    configuration['sqlalchemy.url'] = get_url()
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
