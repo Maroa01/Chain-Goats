@@ -4,7 +4,7 @@ from config.settings import settings, BASE_DIR
 from sqlalchemy.ext.declarative import declarative_base
 
 
-MYSQL_DRIVER = settings.MYSQL_DRIVER
+#MYSQL_DRIVER = settings.MYSQL_DRIVER
 DB_TYPE = settings.DB_TYPE
 DB_USER = settings.DB_USER
 DB_PASSWORD = settings.DB_PASSWORD
@@ -24,8 +24,8 @@ def get_db_engine(test_mode: bool = False):
             return create_engine(
                 DATABASE_URL, connect_args={"check_same_thread": False})
 
-    if DB_TYPE == "mysql":
-        DATABASE_URL = f"mysql+{MYSQL_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/ {DB_NAME}"
+    # if DB_TYPE == "mysql":
+    #     DATABASE_URL = f"mysql+{MYSQL_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/ {DB_NAME}"
 
     elif DB_TYPE == "postgresql":
         DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
