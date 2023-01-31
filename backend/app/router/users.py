@@ -5,7 +5,6 @@ from utils import validator, services
 import database
 
 
-
 router = APIRouter(tags=['Users'], prefix='/user')
 
 
@@ -19,7 +18,7 @@ async def create_user(request: schema.User, db: Session = Depends(database.get_d
             status_code=400,
             detail="This email is already registered."
         )
-    
+
     new_user = await services.new_user_register(request, db)
 
     return new_user
