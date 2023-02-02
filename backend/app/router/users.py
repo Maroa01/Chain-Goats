@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from schemas import schema
 from utils import validator, services
 import database
-
+from typing import List
+from utils.auth import get_current_user
 
 router = APIRouter(tags=['Users'], prefix='/user')
 
@@ -22,3 +23,18 @@ async def create_user(request: schema.User, db: Session = Depends(database.get_d
     new_user = await services.new_user_register(request, db)
 
     return new_user
+
+
+@router.get('/', response_model=List[schema.DisplayUser])
+async def get_all_users(db: Session = Depends(database.get_db), current_user: schema.User = Depends(get_current_user)):
+    return await services.all_user(db)
+
+
+@router.get('/{user_id}', response_model=schema.DisplayUser)
+async def get_user_by_id(user_id: str, db: Session = Depends(database.get_db), current_user: schema.User = Depends(get_current_user)):
+    return await services.get_user_by_id(user_id, db)
+
+@router.delete('/{user_id}', status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def delete_user(user_id: str, db: Session = Depends(database.get_db), current_user: schema.User = Depends(get_current_user)):
+    return await services.delete_user_by_id(user_id, db)
+

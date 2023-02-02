@@ -11,6 +11,8 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = "/api/v1"
     APP_NAME: str = "ChainGoats"
+    JWT_SECRET_KEY: str = config("JWT_SECRET_KEY")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = config("ACCESS_TOKEN_EXPIRE_MINUTES")
 
     # Database
     DB_HOST: str = config("DB_HOST")
