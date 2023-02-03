@@ -6,6 +6,8 @@ class User(BaseModel):
     name: str
     email: EmailStr
     password: str
+    is_active: Optional[bool] = True
+    is_superuser: bool = False
 
 
 class DisplayUser(BaseModel):
@@ -29,7 +31,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
-
+    is_active: Optional[bool] = True
+    is_superuser: bool = False
 
 class UpdatePassword(BaseModel):
     current_password: str

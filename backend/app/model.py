@@ -3,7 +3,7 @@ from typing import List
 from uuid import uuid4
 
 from database import Base
-from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, text
+from sqlalchemy import Boolean,TIMESTAMP, Column, ForeignKey, Integer, String, text
 from sqlalchemy.orm import relationship
 from utils import hashing
 
@@ -12,10 +12,12 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column("user_id", String(64), primary_key=True,
-                index=True, default=str(uuid4))
+                index=True, default=uuid4)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
+    is_active = Column(Boolean(), default=True)
+    is_superuser = Column(Boolean(), default=False)
 
     def __init__(self, name, email, password, *args, **kwargs):
         self.name = name
