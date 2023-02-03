@@ -5,6 +5,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from schemas import schema
 from config.settings import settings
+from model import User
+
 
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY
 ACCESS_TOKEN_EXPIRE = settings.ACCESS_TOKEN_EXPIRE_MINUTES
@@ -46,3 +48,18 @@ def get_current_user(data: str = Depends(oauth2_scheme)):
     )
 
     return verify_token(data, credentials_exception)
+
+
+def get_current_active_user(current_user: User = Depends(get_current_user),) -> User:
+    if not current_user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user")
+    return current_user
+
+
+def get_current_active_superuser(current_user: User = Depends(get_current_user)) -> User:
+    if not current_user.is_superuser:
+        #print(current_user)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User doesn't have enough privileges")
+    #print(current_user)
+    return current_user
