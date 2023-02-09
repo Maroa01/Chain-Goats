@@ -1,4 +1,4 @@
-from model import User
+from app.model import User
 from typing import List, Optional
 from fastapi import HTTPException, status
 

@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+      fastapi:
+                        build: ./backend
+                        command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--reload"]
+                        volumes:
+                          - .backend:/app/backend
+                        environment:
+                               - DB_TYPE=postgresql
+                               - DB_NAME=postgres
+                               - DB_USER=postgres
+                               - DB_PASSWORD=password
+                               - DB_HOST=db
+                               - DB_PORT=5432
+                               - SQLALCHEMY_URL=postgresql://postgres:password@db/postgres
+                               - APP_NAME=ChainGoats
+                               - JWT_SECRET_KEY=eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u8x/A?D(G+KbPdSgVkYp3s6v9y$B&E)H@
+                               - ACCESS_TOKEN_EXPIRE_MINUTES=30
+                        ports:
+                          - "8000:8000"
+                        links:
+                          - db
+                        networks:
+                              - internal-net
+      db:
+        image: postgres
+        restart: always
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+                        - POSTGRES_DB=postgres
+                        - POSTGRES_USER=postgres
+                        - POSTGRES_PASSWORD=password
+        ports:
+                        - "5432"
+        networks:
+                        - internal-net
+
+
+volumes:
+        postgres_data:
+networks:
+        internal-net:
+

@@ -2,10 +2,10 @@ import datetime
 from typing import List
 from uuid import uuid4
 
-from database import Base
+from app.database import Base
 from sqlalchemy import Boolean,TIMESTAMP, Column, ForeignKey, Integer, String, text
 from sqlalchemy.orm import relationship
-from utils import hashing
+from app.utils import hashing
 
 
 class User(Base):
