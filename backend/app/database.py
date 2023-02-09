@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config.settings import settings, BASE_DIR
+from app.config.settings import settings, BASE_DIR
 from sqlalchemy.ext.declarative import declarative_base
 
 

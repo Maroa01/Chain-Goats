@@ -3,9 +3,9 @@ from datetime import timedelta, datetime
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-from schemas import schema
-from config.settings import settings
-from model import User
+from app.schemas import schema
+from app.config.settings import settings
+from app.model import User
 
 
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY

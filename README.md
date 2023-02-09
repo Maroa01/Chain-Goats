@@ -86,13 +86,13 @@ Copy the example in env.example and paste it in .env
 Before running the server, you need to run the migrations
 
   ```bash
-  alembic upgrade head
+    docker compose up - d
   ```
 
-Run fastapi server
+Logging docker to see extra information
 
   ```bash
-  uvicorn main:app --reload
+  docker compose logs -f
   ```
 
 ## 🚀 Running Tests <a name = "testing"></a>
